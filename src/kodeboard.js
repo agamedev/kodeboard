@@ -104,8 +104,19 @@ function KodeBoard(options){
 	//set the canvas classname to kodeboard for additional styling
 	_B.canvas.className = 'kodeboard';
 	
-	//recalculate centre
+	//calculate centre
 	_B.centre = new Point2D(_B.width/2,_B.height/2);
+	
+	//Get corners
+	_B.bottomLeft = new Point2D(0,_B.height);
+	_B.topLeft = new Point2D(0,0);
+	_B.bottomRight = new Point2D(_B.width,_B.height);	
+	_B.topRight = new Point2D(_B.width,0);
+	
+	_B.centreLeft = new Point2D(0,_B.centre.y);
+	_B.centreRight = new Point2D(_B.width,_B.centre.y);
+	_B.centreTop = new Point2D(_B.centre.x,0);
+	_B.centreBottom = new Point2D(_B.centre.x,_B.height);
 	
 	_B.Clear = function(){
 		var context = _B.canvas.getContext("2d");
@@ -118,10 +129,22 @@ function KodeBoard(options){
 		console.log(origin);
 		var context = _B.canvas.getContext("2d");
 		context.beginPath();
+		
 		context.arc(origin.x, origin.y, radius, 0, 2 * Math.PI);
 		context.strokeStyle = _B.strokeStyle;
 		context.stroke();
+		context.fillStyle = _B.fillStyle;
+		context.fill();
 		context.closePath();
+	}
+	
+	_B.DrawLine = function(origin,to){
+			var context = _B.canvas.getContext("2d");
+			context.beginPath();
+			context.moveTo(origin.x, origin.y);
+			context.strokeStyle = _B.strokeStyle;
+			context.lineTo(to.x,to.y);
+			context.stroke();
 	}
 	
 	// Calculate click position within canvas
