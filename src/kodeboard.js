@@ -20,15 +20,48 @@ function Point2D(X,Y){
 		return new Point2D(X,Y);
 	}
 	
-	// CalculateDistance() returns the distance between points a and b
-	_P.CalculateDistance = function( a, b ){
-		var dx = a.x - b.x;
-		var dy = a.y - b.y;
-		return Math.sqrt( dx * dx + dy * dy );
-	}
-	
 	// Initialize with passed in X and Y positions
 	_P.Init(X, Y);
+}
+
+// 2D Circle with x and y properties
+function Circle2D( options ){
+	
+	var _C = this;
+	
+	_C.centre = null;
+	_C.radius = 0;
+	_C.diameter = 0;
+	_C.strokeStyle = "#FFFFFF";
+	_C.fillStyle = "#202020";
+	
+	if(typeof options != 'undefined'){
+		
+		if(typeof options.centre != 'undefined'){    
+			_C.centre = options.centre;
+		}
+		
+		if(typeof options.radius != 'undefined'){    
+			_C.radius = options.radius;
+		}
+
+		if(typeof options.strokeStyle != 'undefined'){    
+			_C.strokeStyle = options.strokeStyle; 
+		}
+		if(typeof options.fillStyle != 'undefined'){    
+			_C.fillStyle = options.fillStyle;
+		}
+	}
+	
+	if(_C.centre == null){
+		console.log('Please specify circle center position as Point2D');
+	}
+	
+	if(_C.radius == 0){
+		console.log('Please specify circle radius');
+	}
+	_C.diameter = _C.radius * 2;
+
 }
 
 // the KodeBoard
@@ -126,7 +159,7 @@ function KodeBoard(options){
 	}
 	
 	_B.DrawCircle = function(origin,radius){
-		console.log(origin);
+
 		var context = _B.canvas.getContext("2d");
 		context.beginPath();
 		
@@ -134,6 +167,18 @@ function KodeBoard(options){
 		context.strokeStyle = _B.strokeStyle;
 		context.stroke();
 		context.fillStyle = _B.fillStyle;
+		context.fill();
+		context.closePath();
+	}
+	
+	_B.DrawCircle2D = function( circle ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		
+		context.arc(circle.centre.x, circle.centre.y, circle.radius, 0, 2 * Math.PI);
+		context.strokeStyle = circle.strokeStyle;
+		context.stroke();
+		context.fillStyle = circle.fillStyle;
 		context.fill();
 		context.closePath();
 	}
@@ -147,6 +192,7 @@ function KodeBoard(options){
 			context.stroke();
 	}
 	
+
 	// Calculate click position within canvas
 	_B.onclick = function(event){
 		var e = event ? event:window.event;
