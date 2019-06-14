@@ -2,7 +2,7 @@
 var KodeBoards = [];
 
 // 2D Point with x and y properties
-function Point2D(X,Y){
+var Point2D  = function (X,Y){
 	
 	var _P = this;
 	
@@ -22,10 +22,12 @@ function Point2D(X,Y){
 	
 	// Initialize with passed in X and Y positions
 	_P.Init(X, Y);
+	
+	return _P;
 }
 
 // 2D Circle with x and y properties
-function Circle2D( options ){
+var Circle2D = function ( options ){
 	
 	var _C = this;
 	
@@ -62,10 +64,11 @@ function Circle2D( options ){
 	}
 	_C.diameter = _C.radius * 2;
 
+	return _C;
 }
 
 // the KodeBoard
-function KodeBoard(options){
+var KodeBoard = function (options){
 	
 	var _B = this;
 	
@@ -159,7 +162,6 @@ function KodeBoard(options){
 	}
 	
 	_B.DrawCircle = function(origin,radius){
-
 		var context = _B.canvas.getContext("2d");
 		context.beginPath();
 		
@@ -215,5 +217,7 @@ function KodeBoard(options){
 	_B.canvas.onclick = function(event){ _B.onclick(event); }
 	
 	_B.Clear(); //Init canvas
+	
+	return _B;
 	
 }

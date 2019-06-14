@@ -14,30 +14,45 @@
 <body>
 <script type="text/javascript">
 var maxRadius = 240;
-var minRadius = 10;
-var step = 2;
-var currentRadius = maxRadius;
-		
-var kb = new KodeBoard({"fillStyle":"#EFEFEF", "strokeStyle":"#000080"});
-kb.DrawLine(kb.centre, kb.bottomLeft);
-//kb.DrawLine(kb.centre, kb.topLeft);
-kb.DrawLine(kb.centre, kb.bottomRight);
-//kb.DrawLine(kb.centre, kb.topRight);
-kb.DrawCircle(kb.centre, currentRadius);
+var minRadius = 60;
+
+var stepInner = 2;
+var stepOuter = -2;
+	
+var kb = new KodeBoard({"fillStyle":"#333333", "strokeStyle":"#333333"});
+
+var innerCircle = new Circle2D({
+	centre: new Point2D(  kb.centre.x, kb.centre.y ),
+	radius: 60,
+	strokeStyle: "#CCCCCC",
+	fillStyle: "#CCCCCC",
+});
+
+var outerCircle = new Circle2D({
+	centre: new Point2D(  kb.centre.x, kb.centre.y ),
+	radius: 240,
+	strokeStyle: "#EFEFEF",
+	fillStyle: "#EFEFEF",
+});
+
 
 //Animate
 var intervalId = setInterval(function(){
 		kb.Clear();
-		kb.DrawLine(kb.centre, kb.bottomLeft);
-		//kb.DrawLine(kb.centre, kb.topLeft);
-		kb.DrawLine(kb.centre, kb.bottomRight);
-		//kb.DrawLine(kb.centre, kb.topRight);
+				
+		innerCircle.radius += stepInner;
+		outerCircle.radius += stepOuter;
 		
-		currentRadius -= step;
+		if( outerCircle.radius == innerCircle.radius){
+			stepInner = -2;
+			stepOuter = 2;
+		}
 		
-		if( currentRadius < minRadius ){ currentRadius = maxRadius; }
+		if( outerCircle.radius == maxRadius){ stepOuter = -2; }
+		if( innerCircle.radius == minRadius){ stepInner = 2; }
 		
-		kb.DrawCircle(kb.centre, currentRadius);
+		kb.DrawCircle2D(outerCircle);
+		kb.DrawCircle2D(innerCircle);
 
 	}, 16.67); //Loop about 60 times per second ( 1,000/60 )
 </script>
