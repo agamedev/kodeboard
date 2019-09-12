@@ -26,7 +26,7 @@ var Point2D  = function (X,Y){
 	return _P;
 }
 
-// 2D Circle with x and y properties
+// 2D Circle with custom properties
 var Circle2D = function ( options ){
 	
 	var _C = this;
@@ -36,6 +36,7 @@ var Circle2D = function ( options ){
 	_C.diameter = 0;
 	_C.strokeStyle = "#FFFFFF";
 	_C.fillStyle = "#202020";
+	_C.lineWidth = "1";
 	
 	if(typeof options != 'undefined'){
 		
@@ -50,8 +51,13 @@ var Circle2D = function ( options ){
 		if(typeof options.strokeStyle != 'undefined'){    
 			_C.strokeStyle = options.strokeStyle; 
 		}
+		
 		if(typeof options.fillStyle != 'undefined'){    
 			_C.fillStyle = options.fillStyle;
+		}
+		
+		if(typeof options.lineWidth != 'undefined'){    
+			_C.lineWidth = options.lineWidth;
 		}
 	}
 	
@@ -66,6 +72,52 @@ var Circle2D = function ( options ){
 
 	return _C;
 }
+// 2D Rectangle with custom properties
+var Rectangle2D  = function ( options ){
+	
+	var _R = this;
+	
+	_R.centre = null;
+	_R.width = 0;
+	_R.height = 0;
+	_R.strokeStyle = "#FFFFFF";
+	_R.fillStyle = "#202020";
+	_R.lineWidth = "1";
+	
+	if(typeof options != 'undefined'){
+		
+		if(typeof options.centre != 'undefined'){    
+			_R.centre = options.centre;
+		}
+		
+		if(typeof options.width != 'undefined'){    
+			_R.width = options.width;
+		}
+		
+		if(typeof options.height != 'undefined'){    
+			_R.height = options.height;
+		}
+
+		if(typeof options.strokeStyle != 'undefined'){    
+			_R.strokeStyle = options.strokeStyle; 
+		}
+		
+		if(typeof options.fillStyle != 'undefined'){    
+			_R.fillStyle = options.fillStyle;
+		}
+		
+		if(typeof options.lineWidth != 'undefined'){    
+			_R.lineWidth = options.lineWidth;
+		}
+	}
+	
+	if(_R.centre == null){
+		console.log('Please specify circle center position as Point2D');
+	}
+
+	return _R;
+}
+
 
 // the KodeBoard
 var KodeBoard = function (options){
@@ -176,7 +228,7 @@ var KodeBoard = function (options){
 	_B.DrawCircle2D = function( circle ){
 		var context = _B.canvas.getContext("2d");
 		context.beginPath();
-		
+		context.lineWidth = circle.lineWidth;
 		context.arc(circle.centre.x, circle.centre.y, circle.radius, 0, 2 * Math.PI);
 		context.strokeStyle = circle.strokeStyle;
 		context.stroke();
@@ -185,6 +237,108 @@ var KodeBoard = function (options){
 		context.closePath();
 	}
 	
+	_B.DrawRectangle = function( origin, width, height ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		
+		context.rect(origin.x, origin.y, width, height);
+		context.strokeStyle = _B.strokeStyle;
+		context.stroke();
+		context.fillStyle = _B.fillStyle;
+		context.fill();
+		context.closePath();
+	}
+	
+	_B.DrawRectangle2D = function( rectangle ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		context.lineWidth = rectangle.lineWidth;
+		context.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+		context.strokeStyle = rectangle.strokeStyle;
+		context.stroke();
+		context.fillStyle = rectangle.fillStyle;
+		context.fill();
+		context.closePath();
+	}
+	
+	_B.DrawSquare = function( origin, length ){
+		_B.DrawRectangle( origin, length, length );
+	}
+	
+	//Equilateral Triangle
+	_B.DrawEquilateralTriangle = function( origin, length ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		context.strokeStyle = _B.strokeStyle;
+
+		context.fillStyle = _B.fillStyle;
+		
+		var startAngle = ( (2*Math.PI)/360 ) * 270; //(Top)
+		
+		var x = length*Math.cos(startAngle) + origin.x;
+		var y = length*Math.sin(startAngle) + origin.y;
+		context.moveTo(x, y);
+		
+		var x1 = length*Math.cos((1./3)*(2*Math.PI)+startAngle) + origin.x;
+		var y1 = length*Math.sin((1./3)*(2*Math.PI)+startAngle) + origin.y;
+		context.lineTo(x1,y1);
+		
+		var x2 = length*Math.cos( (2./3)*(2*Math.PI)+startAngle) + origin.x;
+		var y2 = length*Math.sin( (2./3)*(2*Math.PI)+startAngle) + origin.y;
+		context.lineTo(x2,y2);
+		
+		context.lineTo(x,y);
+		
+		context.stroke();
+		context.fill();		
+		
+		context.closePath();
+	}
+	
+	_B.DrawHexagon = function( origin, radius ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		context.strokeStyle = _B.strokeStyle;
+
+		context.fillStyle = _B.fillStyle;
+		
+		var startAngle = 0;
+		
+		var circleDeg = (2*Math.PI);
+		
+		var x = radius*Math.cos(0) + origin.x;
+		var y = radius*Math.sin(0) + origin.y;
+		context.moveTo(x, y);
+		
+		var x1 = radius*Math.cos((1./6)*circleDeg) + origin.x;
+		var y1 = radius*Math.sin((1./6)*circleDeg) + origin.y;
+		context.lineTo(x1,y1);
+		
+		var x2 = radius*Math.cos( (2./6)*circleDeg) + origin.x;
+		var y2 = radius*Math.sin( (2./6)*circleDeg) + origin.y;
+		context.lineTo(x2,y2);
+		
+		var x3 = radius*Math.cos( (3./6)*circleDeg) + origin.x;
+		var y3 = radius*Math.sin( (3./6)*circleDeg) + origin.y;
+		context.lineTo(x3,y3);
+		
+		var x4 = radius*Math.cos( (4./6)*circleDeg) + origin.x;
+		var y4 = radius*Math.sin( (4./6)*circleDeg) + origin.y;
+		context.lineTo(x4,y4);
+		
+		var x5 = radius*Math.cos( (5./6)*circleDeg) + origin.x;
+		var y5 = radius*Math.sin( (5./6)*circleDeg) + origin.y;
+		context.lineTo(x5,y5);
+		
+		context.lineTo(x,y);
+		
+		context.stroke();
+		context.fill();		
+		
+		context.closePath();
+	}
+	
+	//draw a single line
 	_B.DrawLine = function(origin,to){
 			var context = _B.canvas.getContext("2d");
 			context.beginPath();
@@ -192,8 +346,25 @@ var KodeBoard = function (options){
 			context.strokeStyle = _B.strokeStyle;
 			context.lineTo(to.x,to.y);
 			context.stroke();
+			context.closePath();
 	}
-	
+
+	_B.GetQuadrantPoint2D = function(q){
+		switch(q){
+			case 1: default: {
+				return new Point2D( _B.centre.x + (_B.centre.x/2) , _B.centre.y - (_B.centre.y/2) );
+			}break;
+			case 2:{
+				return new Point2D( _B.centre.x - (_B.centre.x/2) , _B.centre.y - (_B.centre.y/2) );
+			}break;
+			case 3:{
+				return new Point2D( _B.centre.x - (_B.centre.x/2) , _B.centre.y + (_B.centre.y/2) );
+			}break;
+			case 4:{
+				return new Point2D( _B.centre.x + (_B.centre.x/2) , _B.centre.y + (_B.centre.y/2) );
+			}break;
+		}
+	}	
 
 	// Calculate click position within canvas
 	_B.onclick = function(event){
