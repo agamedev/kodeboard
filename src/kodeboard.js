@@ -364,7 +364,41 @@ var KodeBoard = function (options){
 				return new Point2D( _B.centre.x + (_B.centre.x/2) , _B.centre.y + (_B.centre.y/2) );
 			}break;
 		}
-	}	
+	}
+
+	_B.Write = function(txt){
+		var context = _B.canvas.getContext("2d");
+		context.font = "12px Courier New";
+		context.fillStyle = "#009900";
+		context.textAlign = "left";
+		
+		var textData = "Text Here";
+		var textPosition = new Point2D(12, 24);
+		
+		if(typeof txt != 'undefined'){
+			
+			if(typeof txt.text != 'undefined'){    
+				textData = txt.text;
+			}
+			
+			if(typeof txt.position != 'undefined'){    
+				textPosition = txt.position;
+			}
+			
+			if(typeof txt.font != 'undefined'){    
+				context.font = txt.font;
+			}
+			
+			if(typeof txt.fillStyle != 'undefined'){    
+				context.fillStyle = txt.fillStyle;
+			}
+			
+			if(typeof txt.textAlign != 'undefined'){    
+				context.textAlign = txt.textAlign;
+			}
+		}
+		context.fillText(textData, textPosition.x, textPosition.y);
+	}
 
 	// Calculate click position within canvas
 	_B.onclick = function(event){
