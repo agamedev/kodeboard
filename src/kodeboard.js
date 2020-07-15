@@ -26,6 +26,30 @@ var Point2D  = function (X,Y){
 	return _P;
 }
 
+//Generic 2D Object
+var Object2D  = function ( options ){
+	
+	var _O = this;
+	
+	_O.strokeStyle = "#FFFFFF";
+	_O.fillStyle = "#202020";
+	_O.lineWidth = "1";
+
+	if(typeof options != 'undefined'){
+		if(typeof options.strokeStyle != 'undefined'){    
+			_C.strokeStyle = options.strokeStyle; 
+		}
+		
+		if(typeof options.fillStyle != 'undefined'){    
+			_C.fillStyle = options.fillStyle;
+		}
+		
+		if(typeof options.lineWidth != 'undefined'){    
+			_C.lineWidth = options.lineWidth;
+		}
+	}
+}
+
 // 2D Circle with custom properties
 var Circle2D = function ( options ){
 	
@@ -273,18 +297,54 @@ var KodeBoard = function (options){
 
 		context.fillStyle = _B.fillStyle;
 		
-		var startAngle = ( (2*Math.PI)/360 ) * 270; //(Top)
+		var baseDeg = (2*Math.PI);
+		var baseAngle = baseDeg/360 ;
+		
+		var startAngle = baseAngle * 270; //(Top)
 		
 		var x = length*Math.cos(startAngle) + origin.x;
 		var y = length*Math.sin(startAngle) + origin.y;
 		context.moveTo(x, y);
 		
-		var x1 = length*Math.cos((1./3)*(2*Math.PI)+startAngle) + origin.x;
-		var y1 = length*Math.sin((1./3)*(2*Math.PI)+startAngle) + origin.y;
+		var x1 = length*Math.cos((1./3)*baseDeg+startAngle) + origin.x;
+		var y1 = length*Math.sin((1./3)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x1,y1);
 		
-		var x2 = length*Math.cos( (2./3)*(2*Math.PI)+startAngle) + origin.x;
-		var y2 = length*Math.sin( (2./3)*(2*Math.PI)+startAngle) + origin.y;
+		var x2 = length*Math.cos( (2./3)*baseDeg+startAngle) + origin.x;
+		var y2 = length*Math.sin( (2./3)*baseDeg+startAngle) + origin.y;
+		context.lineTo(x2,y2);
+		
+		context.lineTo(x,y);
+		
+		context.stroke();
+		context.fill();		
+		
+		context.closePath();
+	}
+	
+	//Equilateral Triangle
+	_B.DrawEquilateralTriangle2D = function( triangle ){
+		var context = _B.canvas.getContext("2d");
+		context.beginPath();
+		context.strokeStyle = triangle.strokeStyle;
+
+		context.fillStyle = triangle.fillStyle;
+		
+		var baseDeg = (2*Math.PI);
+		var baseAngle = baseDeg/360 ;
+		
+		triangle.startAngle = ( base * 270 ); //(Top)
+		
+		var x = triangle.length * Math.cos(triangle.startAngle) + triangle.x;
+		var y = triangle.length * Math.sin(triangle.startAngle) + triangle.y;
+		context.moveTo(x, y);
+		
+		var x1 = triangle.length * Math.cos((1./3)*baseDeg+triangle.startAngle) + triangle.x;
+		var y1 = triangle.length * Math.sin((1./3)*baseDeg+triangle.startAngle) + triangle.y;
+		context.lineTo(x1,y1);
+		
+		var x2 = triangle.length * Math.cos( (2./3)*baseDeg+triangle.startAngle) + triangle.x;
+		var y2 = triangle.length * Math.sin( (2./3)*baseDeg+triangle.startAngle) + triangle.y;
 		context.lineTo(x2,y2);
 		
 		context.lineTo(x,y);
