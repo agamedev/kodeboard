@@ -237,16 +237,44 @@ var KodeBoard = function (options){
 		context.fillRect(0,0,_B.width,_B.height);
 	}
 	
-	_B.DrawCircle = function(origin,radius){
+	_B.DrawCircle = function(origin,radius, rotationDegrees = 0){
 		var context = _B.canvas.getContext("2d");
+		
+		var centerX = origin.x;
+		var centerY = origin.y;
+		context.save();
+		
+		//TODO: Counterclockwise rotation
+		if(rotationDegrees > 360){
+			rotationDegrees = 0;
+		}
+		if(rotationDegrees < 0){
+			rotationDegrees = 0;
+		}
+		
+		if(rotationDegrees > 0){
+			context.translate(origin.x,origin.y);
+			context.rotate(rotationDegrees * Math.PI / 180);
+			centerX = 0;
+			centerY = 0;
+		}
+		
 		context.beginPath();
 		
-		context.arc(origin.x, origin.y, radius, 0, 2 * Math.PI);
+		//context.arc(origin.x, origin.y, radius, 0, 2 * Math.PI);
+		context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+		
 		context.strokeStyle = _B.strokeStyle;
 		context.stroke();
 		context.fillStyle = _B.fillStyle;
 		context.fill();
 		context.closePath();
+		if(rotationDegrees > 0){
+			//_B.DrawLine(origin,{x:origin.x, y: origin.y+radius});
+			_B.DrawLine({x:centerX,y:centerY},{x:centerX, y: centerY+radius});
+		}
+		
+		context.restore();
 	}
 	
 	_B.DrawCircle2D = function( circle ){
@@ -261,16 +289,37 @@ var KodeBoard = function (options){
 		context.closePath();
 	}
 	
-	_B.DrawRectangle = function( origin, width, height ){
+	_B.DrawRectangle = function( origin, width, height,  rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
-		context.beginPath();
 		
-		context.rect(origin.x, origin.y, width, height);
+		leftX = origin.x;
+		leftY = origin.y;
+		context.save();
+		
+		//TODO: Counterclockwise rotation
+		if(rotationDegrees > 360){
+			rotationDegrees = 0;
+		}
+		if(rotationDegrees < 0){
+			rotationDegrees = 0;
+		}
+		
+		if(rotationDegrees > 0){
+			context.translate(origin.x + (width/2),origin.y + (height/2));
+			context.rotate(rotationDegrees * Math.PI / 180);
+			leftX = -width/2;
+			leftY = -height/2;
+		}
+		context.beginPath();
+		//context.rect(origin.x,origin.y, width, height);
+		context.rect(leftX,leftY, width, height);
 		context.strokeStyle = _B.strokeStyle;
 		context.stroke();
 		context.fillStyle = _B.fillStyle;
 		context.fill();
 		context.closePath();
+		
+		context.restore();
 	}
 	
 	_B.DrawRectangle2D = function( rectangle ){
@@ -285,13 +334,23 @@ var KodeBoard = function (options){
 		context.closePath();
 	}
 	
-	_B.DrawSquare = function( origin, length ){
-		_B.DrawRectangle( origin, length, length );
+	_B.DrawSquare = function( origin, length, rotationDegrees = 0 ){
+		_B.DrawRectangle( origin, length, length, rotationDegrees );
 	}
 	
 	//Equilateral Triangle
-	_B.DrawEquilateralTriangle = function( origin, length ){
+	_B.DrawEquilateralTriangle = function( origin, length, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
+		
+		//TODO: Counterclockwise rotation
+		if(rotationDegrees > 360){
+			rotationDegrees = 0;
+		}
+		if(rotationDegrees < 0){
+			rotationDegrees = 0;
+		}		
+		
+		
 		context.beginPath();
 		context.strokeStyle = _B.strokeStyle;
 
@@ -300,7 +359,12 @@ var KodeBoard = function (options){
 		var baseDeg = (2*Math.PI);
 		var baseAngle = baseDeg/360 ;
 		
-		var startAngle = baseAngle * 270; //(Top)
+		var degOne = 270 + rotationDegrees;
+		if(degOne > 360){
+			degOne -= 360;
+		}
+		
+		var startAngle = baseAngle * degOne; //(Top)
 		
 		var x = length*Math.cos(startAngle) + origin.x;
 		var y = length*Math.sin(startAngle) + origin.y;
@@ -320,11 +384,21 @@ var KodeBoard = function (options){
 		context.fill();		
 		
 		context.closePath();
+		
+	
 	}
 	
 	//Equilateral Triangle
-	_B.DrawEquilateralTriangle2D = function( triangle ){
+	_B.DrawEquilateralTriangle2D = function( triangle, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
+		//TODO: Counterclockwise rotation
+		if(rotationDegrees > 360){
+			rotationDegrees = 0;
+		}
+		if(rotationDegrees < 0){
+			rotationDegrees = 0;
+		}		
+		
 		context.beginPath();
 		context.strokeStyle = triangle.strokeStyle;
 
@@ -333,7 +407,12 @@ var KodeBoard = function (options){
 		var baseDeg = (2*Math.PI);
 		var baseAngle = baseDeg/360 ;
 		
-		triangle.startAngle = ( base * 270 ); //(Top)
+		var degOne = 270 + rotationDegrees;
+		if(degOne > 360){
+			degOne -= 360;
+		}
+		
+		triangle.startAngle = ( baseAngle * degOne ); //(Top)
 		
 		var x = triangle.length * Math.cos(triangle.startAngle) + triangle.x;
 		var y = triangle.length * Math.sin(triangle.startAngle) + triangle.y;
@@ -355,39 +434,54 @@ var KodeBoard = function (options){
 		context.closePath();
 	}
 	
-	_B.DrawHexagon = function( origin, radius ){
+	_B.DrawHexagon = function( origin, radius, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
+		//TODO: Counterclockwise rotation
+		if(rotationDegrees > 360){
+			rotationDegrees = 0;
+		}
+		if(rotationDegrees < 0){
+			rotationDegrees = 0;
+		}		
+		
 		context.beginPath();
 		context.strokeStyle = _B.strokeStyle;
 
 		context.fillStyle = _B.fillStyle;
 		
-		var startAngle = 0;
+		var baseDeg = (2*Math.PI);
+		var baseAngle = baseDeg/360 ;
 		
-		var circleDeg = (2*Math.PI);
+		var degOne = 0 + rotationDegrees;
+		if(degOne > 360){
+			degOne -= 360;
+		}
+		var startAngle = ( baseAngle * degOne );
 		
-		var x = radius*Math.cos(0) + origin.x;
-		var y = radius*Math.sin(0) + origin.y;
+		//var circleDeg = (2*Math.PI);
+		
+		var x = radius*Math.cos(startAngle) + origin.x;
+		var y = radius*Math.sin(startAngle) + origin.y;
 		context.moveTo(x, y);
 		
-		var x1 = radius*Math.cos((1./6)*circleDeg) + origin.x;
-		var y1 = radius*Math.sin((1./6)*circleDeg) + origin.y;
+		var x1 = radius*Math.cos((1./6)*baseDeg+startAngle) + origin.x;
+		var y1 = radius*Math.sin((1./6)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x1,y1);
 		
-		var x2 = radius*Math.cos( (2./6)*circleDeg) + origin.x;
-		var y2 = radius*Math.sin( (2./6)*circleDeg) + origin.y;
+		var x2 = radius*Math.cos( (2./6)*baseDeg+startAngle) + origin.x;
+		var y2 = radius*Math.sin( (2./6)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x2,y2);
 		
-		var x3 = radius*Math.cos( (3./6)*circleDeg) + origin.x;
-		var y3 = radius*Math.sin( (3./6)*circleDeg) + origin.y;
+		var x3 = radius*Math.cos( (3./6)*baseDeg+startAngle) + origin.x;
+		var y3 = radius*Math.sin( (3./6)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x3,y3);
 		
-		var x4 = radius*Math.cos( (4./6)*circleDeg) + origin.x;
-		var y4 = radius*Math.sin( (4./6)*circleDeg) + origin.y;
+		var x4 = radius*Math.cos( (4./6)*baseDeg+startAngle) + origin.x;
+		var y4 = radius*Math.sin( (4./6)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x4,y4);
 		
-		var x5 = radius*Math.cos( (5./6)*circleDeg) + origin.x;
-		var y5 = radius*Math.sin( (5./6)*circleDeg) + origin.y;
+		var x5 = radius*Math.cos( (5./6)*baseDeg+startAngle) + origin.x;
+		var y5 = radius*Math.sin( (5./6)*baseDeg+startAngle) + origin.y;
 		context.lineTo(x5,y5);
 		
 		context.lineTo(x,y);
