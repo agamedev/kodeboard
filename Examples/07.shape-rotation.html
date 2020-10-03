@@ -47,13 +47,13 @@ var intervalId = setInterval(function(){
 	
 	kb.Clear();
 
-	kb.DrawCircle( quadrant1, radius-20, angle);
+	kb.DrawCircle( quadrant1, radius-20, -angle);
 	
 	kb.DrawRectangle(quadrant2, (length*2)-20, length, angle); //width, height
 
-	kb.DrawSquare( quadrant3, (length*2)-20, angle );
+	kb.DrawSquare( quadrant3, (length*2)-20, -angle ); //counter clockwise
 
-	kb.DrawEquilateralTriangle( quadrant4, length, angle );
+	kb.DrawEquilateralTriangle( quadrant4, length, -angle ); //counter clockwise
 
 	kb.DrawHexagon( kb.centre, length-20, angle );
 

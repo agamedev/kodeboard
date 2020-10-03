@@ -244,15 +244,14 @@ var KodeBoard = function (options){
 		var centerY = origin.y;
 		context.save();
 		
-		//TODO: Counterclockwise rotation
 		if(rotationDegrees > 360){
 			rotationDegrees = 0;
 		}
-		if(rotationDegrees < 0){
+		if(rotationDegrees < -360){
 			rotationDegrees = 0;
 		}
 		
-		if(rotationDegrees > 0){
+		if(rotationDegrees > -360){
 			context.translate(origin.x,origin.y);
 			context.rotate(rotationDegrees * Math.PI / 180);
 			centerX = 0;
@@ -269,7 +268,7 @@ var KodeBoard = function (options){
 		context.fillStyle = _B.fillStyle;
 		context.fill();
 		context.closePath();
-		if(rotationDegrees > 0){
+		if(rotationDegrees > -360){
 			//_B.DrawLine(origin,{x:origin.x, y: origin.y+radius});
 			_B.DrawLine({x:centerX,y:centerY},{x:centerX, y: centerY+radius});
 		}
@@ -296,15 +295,14 @@ var KodeBoard = function (options){
 		leftY = origin.y;
 		context.save();
 		
-		//TODO: Counterclockwise rotation
 		if(rotationDegrees > 360){
 			rotationDegrees = 0;
 		}
-		if(rotationDegrees < 0){
+		if(rotationDegrees < -360){
 			rotationDegrees = 0;
 		}
 		
-		if(rotationDegrees > 0){
+		if(rotationDegrees > -360){
 			context.translate(origin.x + (width/2),origin.y + (height/2));
 			context.rotate(rotationDegrees * Math.PI / 180);
 			leftX = -width/2;
@@ -342,14 +340,12 @@ var KodeBoard = function (options){
 	_B.DrawEquilateralTriangle = function( origin, length, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
 		
-		//TODO: Counterclockwise rotation
 		if(rotationDegrees > 360){
 			rotationDegrees = 0;
 		}
-		if(rotationDegrees < 0){
+		if(rotationDegrees < -360){
 			rotationDegrees = 0;
 		}		
-		
 		
 		context.beginPath();
 		context.strokeStyle = _B.strokeStyle;
@@ -391,11 +387,11 @@ var KodeBoard = function (options){
 	//Equilateral Triangle
 	_B.DrawEquilateralTriangle2D = function( triangle, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
-		//TODO: Counterclockwise rotation
+
 		if(rotationDegrees > 360){
 			rotationDegrees = 0;
 		}
-		if(rotationDegrees < 0){
+		if(rotationDegrees < -360){
 			rotationDegrees = 0;
 		}		
 		
@@ -436,11 +432,11 @@ var KodeBoard = function (options){
 	
 	_B.DrawHexagon = function( origin, radius, rotationDegrees = 0 ){
 		var context = _B.canvas.getContext("2d");
-		//TODO: Counterclockwise rotation
+
 		if(rotationDegrees > 360){
 			rotationDegrees = 0;
 		}
-		if(rotationDegrees < 0){
+		if(rotationDegrees < -360){
 			rotationDegrees = 0;
 		}		
 		
